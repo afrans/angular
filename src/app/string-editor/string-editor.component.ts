@@ -35,7 +35,7 @@ export class StringEditorComponent {
     });
   }
 
-  private apiUrl = 'http://localhost:3000/strings/1';  // URL do json-server
+  private apiUrl = 'http://localhost:3000/strings/1';
 
 
 
