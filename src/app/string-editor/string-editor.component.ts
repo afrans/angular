@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './string-editor.component.html',
-  styleUrls: ['./string-editor.component.css'] // <- Corrigido
+  styleUrls: ['./string-editor.component.css']
 })
 export class StringEditorComponent {
   text: string = 'Texto inicial';
@@ -36,8 +36,6 @@ export class StringEditorComponent {
   }
 
   private apiUrl = 'http://localhost:3000/strings/1';
-
-
 
   updateString(newValue: string): Observable<{ updatedString: string }> {
     return this.httpClient.get<{ text: string }>(this.apiUrl).pipe(
