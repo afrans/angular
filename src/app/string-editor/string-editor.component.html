@@ -1,0 +1,6 @@
+<div>
+  <input #inputText [value]="text" placeholder="Digite novo valor">
+  <button (click)="editText(inputText.value)" [disabled]="isLoading">
+    Editar <div *ngIf="isLoading" class="spinner-inline"></div>
+  </button>
+</div>
