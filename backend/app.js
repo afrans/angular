@@ -11,10 +11,9 @@ app.use(bodyParser.json());
 // CORS
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // allow all domains
-  res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE, PATCH, POST");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
   next();
 });
 
@@ -81,6 +80,69 @@ app.delete("/user-places/:id", async (req, res) => {
   );
 
   res.status(200).json({ userPlaces: updatedUserPlaces });
+});
+
+const stringFilePath = "./data/strings.json";
+
+// GET endpoint to retrieve the string
+app.get("/strings", async (req, res) => {
+  try {
+    const fileContent = await fs.readFile(stringFilePath, "utf-8");
+    const data = JSON.parse(fileContent);
+    res.status(200).json({ string: data.string });
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.status(200).json({ string: "" }); // Return empty string if file doesn't exist
+    } else {
+      res.status(500).json({ message: "Failed to read the string" });
+    }
+  }
+});
+
+// POST endpoint to save a new string
+app.post("/strings", async (req, res) => {
+  const newString = req.body.string;
+
+  if (!newString || typeof newString !== "string") {
+    return res.status(400).json({ message: "Invalid string provided" });
+  }
+
+  try {
+    await fs.writeFile(stringFilePath, JSON.stringify({ string: newString }));
+    res.status(201).json({ message: "String saved successfully", string: newString });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to save the string" });
+  }
+});
+
+// PATCH endpoint to update the string
+app.patch("/strings", async (req, res) => {
+  const updatedString = req.body.string;
+
+  if (!updatedString || typeof updatedString !== "string") {
+    return res.status(400).json({ message: "Invalid string provided" });
+  }
+
+  console.log("Recebendo PATCH na rota /strings");
+  console.log("Dados recebidos:", req.body);
+
+  console.log('Recebendo PATCH com dados:', req.body);
+
+  try {
+    const fileContent = await fs.readFile(stringFilePath, "utf-8");
+    const data = JSON.parse(fileContent);
+
+    data.string = updatedString;
+
+    await fs.writeFile(stringFilePath, JSON.stringify(data));
+    res.status(200).json({ message: "String updated successfully", string: updatedString });
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.status(404).json({ message: "String not found" });
+    } else {
+      res.status(500).json({ message: "Failed to update the string" });
+    }
+  }
 });
 
 // 404
