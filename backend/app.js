@@ -123,10 +123,10 @@ app.patch("/strings", async (req, res) => {
     return res.status(400).json({ message: "Invalid string provided" });
   }
 
-  console.log("Recebendo PATCH na rota /strings");
-  console.log("Dados recebidos:", req.body);
+  console.log("Receiving PATCH in the route /strings");
+  console.log("Datas received:", req.body);
 
-  console.log('Recebendo PATCH com dados:', req.body);
+  console.log('Receiving PATCH with datas:', req.body);
 
   try {
     const fileContent = await fs.readFile(stringFilePath, "utf-8");

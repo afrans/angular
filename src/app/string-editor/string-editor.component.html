@@ -1,12 +1,16 @@
-<div>
-  <input 
-    #inputText 
-    [value]="text" 
-    placeholder="Digite novo valor" 
-    (keyup.enter)="editText(inputText.value)" 
-    (blur)="editText(inputText.value)"
-  >
-  <button (click)="editText(inputText.value)" [disabled]="isLoading">
-    Editar <div *ngIf="isLoading" class="spinner-inline"></div>
-  </button>
+<div class="string-editor-container">
+  <div class="textfield-label-container">
+    <label class="textfield-label">Name</label>
+  </div>
+  <div class="input-wrapper">
+    <input #inputText [value]="text" [readonly]="!isEditing" placeholder="Digite novo valor"
+      (keyup.enter)="stopEditing(inputText.value, inputText)" (blur)="stopEditing(inputText.value, inputText)"
+      maxlength="20" class="custom-textfield">
+    <span class="pencil-icon" (click)="startEditing(inputText)" [class.disabled]="isLoading">
+      ✏️
+    </span>
+      <span *ngIf="isLoading" class="loading-animation"></span>
+
+  </div>
+
 </div>

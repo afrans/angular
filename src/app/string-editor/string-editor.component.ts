@@ -11,31 +11,23 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './string-editor.component.html',
   styleUrls: ['./string-editor.component.css']
 })
-export class StringEditorComponent  implements OnInit{
+export class StringEditorComponent implements OnInit {
   text: string = 'Texto inicial';
   isLoading: boolean = false;
+  isEditing: boolean = false; // New property to control editing state
+
   private httpClient = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/strings';
 
   constructor(
     private stringService: StringService
-  ) {}
+  ) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.fetchString(); // Fetch the string on component initialization
   }
 
-  //   fetchString(): void {
-  //   this.isLoading = true;
-  //   this.httpClient.get<{ string: string }>('http://localhost:3000/strings').subscribe({
-  //     next: (response) => {
-  //       this.text = response.string; // Populate the text with the fetched string
-  //     },
-  //     error: (error) => console.error('Error fetching the string', error),
-  //     complete: () => (this.isLoading = false)
-  //   });
-  // }
-
-    fetchString(): void {
+  fetchString(): void {
     this.isLoading = true;
     this.stringService.fetchString().subscribe({
       next: (response) => {
@@ -46,45 +38,35 @@ export class StringEditorComponent  implements OnInit{
     });
   }
 
-  // editText(newText: string) {
-  //   this.isLoading = true;
-  //   // this.stringService.updateString(newText).subscribe({
-  //   //   next: (response: { updatedString: string; }) => (this.text = response.updatedString),
-  //   //   error: (error: any) => console.error('Erro ao atualizar a string', error),
-  //   //   complete: () => (this.isLoading = false)
-  //   // });
-  //   this.updateString(newText).subscribe({
-  //     next: (response: { updatedString: string; }) => { 
-  //       this.text = response.updatedString; 
-  //       console.log(this.text) },
-  //     error: (error: any) => console.error('Erro ao atualizar a string', error),
-  //     complete: () => (this.isLoading = false)
-  //   });
-  // }
-
-    editText(newText: string): void {
+  editText(newText: string): void {
     this.isLoading = true;
-    this.stringService.updateString(newText).subscribe({
-      next: (response) => {
-        this.text = response.updatedString;
-        console.log(this.text);
-      },
-      error: (error) => console.error('Error updating the string', error),
-      complete: () => (this.isLoading = false)
-    });
+
+    // Simulate a delay to show the loading animation
+    setTimeout(() => {
+      this.stringService.updateString(newText).subscribe({
+        next: (response) => {
+          this.text = response.updatedString; // Update the text with the server response
+          console.log('Texto atualizado:', this.text);
+        },
+        error: (error) => console.error('Error updating the string', error),
+        complete: () => {
+          this.isLoading = false; // Hide the loading animation
+        }
+      });
+    }, 1000); // Add a 500ms delay before starting the request
   }
 
-  // private apiUrl = 'http://localhost:3000/strings/1';
+  startEditing(inputElement: HTMLInputElement): void {
+    this.isEditing = true; // Enable editing
+    inputElement.focus();
+  }
 
-    private apiUrl = 'http://localhost:3000/strings';
+  stopEditing(newText: string, inputElement: HTMLInputElement): void {
+    if (newText !== this.text) {
+      this.editText(newText);
+    }
+     this.isEditing = false; // Disable editing
+    inputElement.blur(); // Remove focus from the input field
 
-
-  updateString(newValue: string): Observable<{ updatedString: string }> {
-    console.log('updateString', newValue);
-    console.log('Enviando PATCH para:', this.apiUrl, 'com dados:', { string: newValue });
-    
-    return this.httpClient.patch<{ string: string }>(this.apiUrl, { string: newValue }).pipe(
-      map(response => ({ updatedString: response.string })) // Converte o formato1
-    );
   }
 }

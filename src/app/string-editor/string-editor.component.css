@@ -1,25 +1,65 @@
-.spinner {
-    width: 24px;
-    height: 24px;
-    border: 3px solid #ccc;
-    border-top: 3px solid #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+/* Wrapper for input and pencil icon */
+.input-wrapper {
+  display: flex; /* Use flexbox to align the input and pencil icon horizontally */
+  align-items: center; /* Vertically align the input and pencil icon */
+  width: auto; /* Allow the wrapper to adjust to the input's width */
+}
+
+/* Custom text field */
+.custom-textfield {
+  width: calc(20ch + 8px); /* Limit the input field to 20 characters and add padding */
+  max-width: 100%; /* Ensure it doesn't exceed the container width */
+  border: none; /* Remove all borders */
+  background: transparent; /* Make the background invisible */
+  font-size: 16px; /* Adjust font size */
+  color: inherit; /* Inherit the color from the parent container */
+  outline: none; /* Remove the default focus outline */
+  transition: color 0.3s ease; /* Smooth transition for color changes */
+}
+
+/* Ensure the color does not change on focus */
+.custom-textfield:focus {
+  outline: none; /* Ensure no outline appears on focus */
+  color: inherit; /* Keep the same color as the label */
+}
+
+/* Pencil icon styles */
+.pencil-icon {
+  margin-left: 8px; /* Add spacing between the input and the pencil icon */
+  cursor: pointer; /* Make it look clickable */
+  font-size: 18px; /* Adjust the size of the pencil icon */
+  color: #007bff; /* Use a primary color for the icon */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.pencil-icon:hover {
+  color: #0056b3; /* Darker shade on hover */
+}
+
+.pencil-icon.disabled {
+  cursor: not-allowed; /* Disable clicking when loading */
+  color: #ccc; /* Gray out the icon */
+}
+
+/* Loading animation (rotating circle) */
+.loading-animation {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px; /* Add spacing to the right of the button text */
+  border: 2px solid #007bff; /* Outer border */
+  border-top: 2px solid transparent; /* Transparent top for the spinning effect */
+  border-radius: 50%; /* Make it circular */
+  animation: spin 1s linear infinite; /* Rotating animation */
+  vertical-align: middle; /* Align with the middle of the button text */
+}
+
+/* Rotating animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .spinner-inline {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid #ccc;
-    border-top: 2px solid #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-left: 5px;
-    vertical-align: middle;
+  100% {
+    transform: rotate(360deg);
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
